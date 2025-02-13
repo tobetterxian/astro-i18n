@@ -1,20 +1,19 @@
 import { defineMiddleware } from "astro:middleware";
 import { defaultLocale, locales } from './i18n/utils';
 
-export const onRequest = defineMiddleware(async (context, next) => {
-  const { request, redirect } = context;
+export const onRequest = defineMiddleware(async ({ request, redirect, rewrite }, next) => {
   const url = new URL(request.url);
   const pathname = url.pathname;
   
   // 提取URL中的第一段作为可能的语言代码
   const [, firstSegment] = pathname.split('/');
   
-  // 如果路径以 /quotes 开头，内部重写到默认语言版本，但不重定向
+  console.log("defineMiddleware")
+  // 如果路径以 /quotes 开头，内部重写到默认语言版本
   if (pathname.startsWith('/quotes/') || pathname === '/quotes') {
-    context.locals.locale = defaultLocale;
-    url.pathname = pathname.replace('/quotes', `/${defaultLocale}/quotes`);
-    context.url = url;
-    return next();
+    const newPath = pathname.replace('/quotes', `/${defaultLocale}/quotes`);
+    console.log("newPath:", newPath)
+    return rewrite(newPath);
   }
 
   // 如果是默认语言的前缀，重定向到无前缀版本

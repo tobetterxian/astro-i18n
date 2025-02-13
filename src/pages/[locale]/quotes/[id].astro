@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import { startsWithLanguages, type Lang } from "../../../i18n";
+import { locales, defaultLocale } from "../../../i18n/utils";
 import QuotePage from "../../../components/QuotePage.astro";
 
 interface Props {
@@ -8,19 +8,39 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-  return (await getCollection("quotes"))
-    .filter((quote) => startsWithLanguages(quote.id))
-    .map((quote) => {
-      const [lang, ...slug] = quote.id.split("/");
-      return {
-        params: { locale: lang as Lang, id: slug.join("/") || undefined },
-        props: { quote },
-      };
-    });
+  const quotes = await getCollection("quotes");
+  
+  // 为所有语言创建路由，包括默认语言
+  return locales.flatMap(locale => {
+    return quotes
+      .filter(quote => quote.id.startsWith(`${locale}/`))
+      .map(quote => {
+        const id = quote.id.replace(`${locale}/`, '');
+        // 如果是默认语言，返回两个路由：一个带语言前缀，一个不带
+        if (locale === defaultLocale) {
+          return [
+            {
+              params: { locale, id },
+              props: { quote }
+            },
+            {
+              params: { locale: 'quotes', id }, // 处理无语言前缀的路由
+              props: { quote }
+            }
+          ];
+        }
+        // 非默认语言只返回带语言前缀的路由
+        return {
+          params: { locale, id },
+          props: { quote }
+        };
+      });
+  }).flat(); // 展平数组
 }
 
-const { locale } = Astro.params;
 const { quote } = Astro.props;
+const { locale } = Astro.params;
+const currentLocale = locale === 'quotes' ? defaultLocale : locale;
 ---
 
-<QuotePage quote={quote} locale={locale} />
+<QuotePage quote={quote} locale={currentLocale} />

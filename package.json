@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "vercel-build": "astro build",
+    "debug": "NODE_OPTIONS='--inspect' astro dev"
   },
   "dependencies": {
     "astro": "^4.2.0",

@@ -20,7 +20,9 @@ export default defineConfig({
     isr: {
       enabled: true,
       expiration: 60
-    }
+    },
+    devMode: true,
+    debug: true
   }),
   i18n: {
     defaultLocale: "zh",

@@ -20,8 +20,7 @@ export default defineConfig({
     isr: {
       enabled: true,
       expiration: 60
-    },
-    runtime: 'now-node@1.0.0'
+    }
   }),
   i18n: {
     defaultLocale: "zh",

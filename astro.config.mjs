@@ -5,7 +5,7 @@ import vercel from '@astrojs/vercel/serverless';
 // https://astro.build/config
 export default defineConfig({
   logLevel: 'debug',
-  output: 'hybrid',
+  output: 'server',
   build: {
     format: 'directory',
     inlineStylesheets: 'never',
@@ -21,8 +21,7 @@ export default defineConfig({
       enabled: true,
       expiration: 60
     },
-    devMode: true,
-    debug: true
+    runtime: 'nodejs18.x'
   }),
   i18n: {
     defaultLocale: "zh",

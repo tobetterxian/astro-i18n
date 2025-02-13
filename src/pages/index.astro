@@ -2,7 +2,6 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages, stripLangPrefix } from "../i18n";
 import { getCollection, type CollectionEntry } from "astro:content";
-import Layout from '../layouts/Layout.astro';
 import { defaultLocale } from '../i18n/utils';
 
 const quotesIds = (await getCollection("quotes")).map(
@@ -16,26 +15,19 @@ const urls = Object.keys(languages).flatMap((lang) =>
     getRelativeLocaleUrl(lang, `quotes/${id}`),
   ])
 );
-
-// 默认使用中文内容
-const locale = defaultLocale;
 ---
 
-<Layout title="首页">
-  <h1>欢迎访问我们的网站</h1>
-  <!-- 其他中文内容 -->
-</Layout>
-
-<html lang="en">
+<!DOCTYPE html>
+<html lang={defaultLocale}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>首页</title>
   </head>
   <body>
-    <h1>Astro</h1>
+    <h1>欢迎访问我们的网站</h1>
     {
       urls.map(([label, url]) => (
         <p>

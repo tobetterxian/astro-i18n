@@ -10,37 +10,37 @@ interface Props {
 export async function getStaticPaths() {
   const quotes = await getCollection("quotes");
   
-  // 为所有语言创建路由，包括默认语言
-  return locales.flatMap(locale => {
-    return quotes
-      .filter(quote => quote.id.startsWith(`${locale}/`))
-      .map(quote => {
-        const id = quote.id.replace(`${locale}/`, '');
-        // 如果是默认语言，返回两个路由：一个带语言前缀，一个不带
-        if (locale === defaultLocale) {
-          return [
-            {
-              params: { locale, id },
-              props: { quote }
-            },
-            {
-              params: { locale: 'quotes', id }, // 处理无语言前缀的路由
-              props: { quote }
-            }
-          ];
-        }
-        // 非默认语言只返回带语言前缀的路由
-        return {
-          params: { locale, id },
-          props: { quote }
-        };
+  // 为所有语言创建路由
+  const paths = [];
+
+  // 处理默认语言 - 直接放在根目录下
+  const defaultQuotes = quotes.filter(quote => quote.id.startsWith(`${defaultLocale}/`));
+  for (const quote of defaultQuotes) {
+    const id = quote.id.replace(`${defaultLocale}/`, '');
+    paths.push({
+      params: { locale: defaultLocale, id },
+      props: { quote }
+    });
+  }
+
+  // 处理其他语言
+  const otherLocales = locales.filter(locale => locale !== defaultLocale);
+  for (const locale of otherLocales) {
+    const localeQuotes = quotes.filter(quote => quote.id.startsWith(`${locale}/`));
+    for (const quote of localeQuotes) {
+      const id = quote.id.replace(`${locale}/`, '');
+      paths.push({
+        params: { locale, id },
+        props: { quote }
       });
-  }).flat(); // 展平数组
+    }
+  }
+
+  return paths;
 }
 
 const { quote } = Astro.props;
 const { locale } = Astro.params;
-const currentLocale = locale === 'quotes' ? defaultLocale : locale;
 ---
 
-<QuotePage quote={quote} locale={currentLocale} />
+<QuotePage quote={quote} locale={locale} />

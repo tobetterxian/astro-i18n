@@ -5,7 +5,7 @@ import vercel from '@astrojs/vercel/serverless';
 // https://astro.build/config
 export default defineConfig({
   logLevel: 'debug',
-  output: 'server',
+  output: 'hybrid',
   build: {
     format: 'directory',
     inlineStylesheets: 'never',

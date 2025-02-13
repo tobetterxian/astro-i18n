@@ -1,7 +1,7 @@
-import { sequence } from 'astro:middleware';
+import { defineMiddleware } from "astro:middleware";
 import { defaultLocale, locales } from './i18n/utils';
 
-async function localeMiddleware({ request, redirect }) {
+export const onRequest = defineMiddleware(async ({ request, redirect }, next) => {
   const url = new URL(request.url);
   const pathname = url.pathname;
   
@@ -13,10 +13,10 @@ async function localeMiddleware({ request, redirect }) {
     return redirect(pathname.replace(`/${defaultLocale}`, ''));
   }
   
-  // 如果不是有效的语言代码且不是默认语言，继续正常处理
+  // 如果不是有效的语言代码，继续正常处理
   if (!locales.includes(firstSegment)) {
-    return;
+    return next();
   }
-}
 
-export const onRequest = sequence(localeMiddleware); 
+  return next();
+}); 

@@ -1,0 +1,13 @@
+import { getQuoteUrl } from '../i18n/utils';
+
+interface Props {
+  id: string;
+  locale: string;
+}
+
+const { id, locale } = Astro.props;
+const url = getQuoteUrl(id, locale);
+
+<a href={url}>
+  <slot />
+</a> 

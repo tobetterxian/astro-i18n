@@ -12,4 +12,12 @@ export function getLocaleFromURL(url: URL): Locale {
     return locale as Locale;
   }
   return defaultLocale;
+}
+
+// 生成引用链接的函数
+export function getQuoteUrl(id: string, locale: string) {
+  if (locale === defaultLocale) {
+    return `/quotes/${id}`;
+  }
+  return `/${locale}/quotes/${id}`;
 } 

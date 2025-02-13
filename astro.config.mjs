@@ -21,7 +21,7 @@ export default defineConfig({
       enabled: true,
       expiration: 60
     },
-    runtime: 'nodejs18.x'
+    runtime: 'nodejs@18'
   }),
   i18n: {
     defaultLocale: "zh",

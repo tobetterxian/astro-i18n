@@ -1,0 +1,27 @@
+---
+import { type CollectionEntry } from "astro:content";
+import type { Lang } from "../i18n";
+
+interface Props {
+  quote: CollectionEntry<"quotes">;
+  locale: Lang;
+}
+
+const { quote, locale } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Quote</title>
+  </head>
+
+  <body class="text-gray-900">
+    <h2>{quote.data.content}</h2>
+    <h2>{quote.data.author}</h2>
+  </body>
+</html>

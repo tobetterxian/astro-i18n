@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { locales, defaultLocale } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return locales
+    .filter(locale => locale !== defaultLocale) // 排除默认语言
+    .map(locale => ({
+      params: { locale },
+    }));
+}
+
+const { locale } = Astro.params;
+---
+
+<Layout title={locale === 'en' ? 'Home' : '首页'}>
+  {locale === 'en' ? (
+    <h1>Welcome to our website</h1>
+  ) : (
+    <h1>欢迎访问我们的网站</h1>
+  )}
+  <!-- 其他语言内容 -->
+</Layout> 

@@ -29,11 +29,5 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false
     }
-  },
-  site: 'http://localhost:4321',
-  pages: {
-    '404': {
-      prerender: false
-    }
   }
 });
